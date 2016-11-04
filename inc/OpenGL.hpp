@@ -1,44 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ParticleSystem.hpp                                 :+:      :+:    :+:   */
+/*   OpenGL.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/04 08:44:18 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/04 14:51:22 by lfourque         ###   ########.fr       */
+/*   Created: 2016/11/04 08:48:41 by lfourque          #+#    #+#             */
+/*   Updated: 2016/11/04 13:43:14 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARTICLE_SYSTEM_HPP
-# define PARTICLE_SYSTEM_HPP
+#ifndef OPENGL_PS_HPP
+# define OPENGL_PS_HPP
 
-# include "particle_system.h"
-
-class	ParticleSystem {
-
+class	OpenGL {
 	private:
-		SDL		sdl;
-		OpenGL	opengl;
-		OpenCL	opencl;
-		Shader	shader;
-		Camera	camera;
-
-		glm::vec4	gravity_point;
+		GLuint	vao;
 
 	public:
-		ParticleSystem();
+		GLuint	pos_vbo;
+		GLuint	vel_vbo;
 
-		void	init();
-		void	launch();
-		void	update();
+		OpenGL();
 
-		void	screenToWorld(unsigned int x, unsigned int y);
+		void	initVBOs();
+		void	initVAO();
+		void	render();
 
-		static std::string	readFile(std::string path);
+		float	getXCoord(unsigned int x);
+		float	getYCoord(unsigned int y);
 
-		~ParticleSystem();
-
+		~OpenGL();
 };
 
 #endif

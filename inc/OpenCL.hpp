@@ -1,44 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ParticleSystem.hpp                                 :+:      :+:    :+:   */
+/*   OpenCL.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/04 08:44:18 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/04 14:51:22 by lfourque         ###   ########.fr       */
+/*   Created: 2016/11/04 09:01:24 by lfourque          #+#    #+#             */
+/*   Updated: 2016/11/04 09:03:07 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARTICLE_SYSTEM_HPP
-# define PARTICLE_SYSTEM_HPP
+#ifndef OPENCL_PS_HPP
+# define OPENCL_PS_HPP
 
 # include "particle_system.h"
 
-class	ParticleSystem {
-
+class	OpenCL {
 	private:
-		SDL		sdl;
-		OpenGL	opengl;
-		OpenCL	opencl;
-		Shader	shader;
-		Camera	camera;
-
-		glm::vec4	gravity_point;
+		std::vector<cl::Device>	devices;
+		unsigned int			used_device;
+		cl_int					error;
 
 	public:
-		ParticleSystem();
+		cl::Context				context;
+		cl::CommandQueue		queue;
+		cl::Program				program;
 
-		void	init();
-		void	launch();
-		void	update();
+		std::vector<cl::Memory>	buffers;
 
-		void	screenToWorld(unsigned int x, unsigned int y);
+		OpenCL();
 
-		static std::string	readFile(std::string path);
+		void		loadCLProgram(std::string path);
+		std::string	errorString(cl_int error);
 
-		~ParticleSystem();
-
+		~OpenCL();
 };
 
 #endif

@@ -1,44 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ParticleSystem.hpp                                 :+:      :+:    :+:   */
+/*   Camera.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/04 08:44:18 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/04 14:51:22 by lfourque         ###   ########.fr       */
+/*   Created: 2016/10/18 16:00:56 by lfourque          #+#    #+#             */
+/*   Updated: 2016/10/25 13:07:54 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARTICLE_SYSTEM_HPP
-# define PARTICLE_SYSTEM_HPP
+#ifndef CAMERA_HPP
+# define CAMERA_HPP
 
 # include "particle_system.h"
 
-class	ParticleSystem {
-
+class	Camera {
 	private:
-		SDL		sdl;
-		OpenGL	opengl;
-		OpenCL	opencl;
-		Shader	shader;
-		Camera	camera;
+		glm::mat4	_view;
+		glm::mat4	_projection;
 
-		glm::vec4	gravity_point;
+		Camera(Camera const & rhs);
+		Camera &	operator=(Camera const & rhs);
 
 	public:
-		ParticleSystem();
+		Camera();
+		Camera(glm::mat4 view, glm::mat4 projection);
 
-		void	init();
-		void	launch();
-		void	update();
+		void		setProjection(glm::mat4 projection);
+		void		setView(glm::mat4 view);
+		void		setPosition(float x, float y, float z);
 
-		void	screenToWorld(unsigned int x, unsigned int y);
+		glm::mat4 &	projection();
+		glm::mat4 &	view();
 
-		static std::string	readFile(std::string path);
-
-		~ParticleSystem();
-
+		~Camera();
 };
 
 #endif
+
