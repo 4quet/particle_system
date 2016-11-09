@@ -6,7 +6,7 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/18 16:00:56 by lfourque          #+#    #+#             */
-/*   Updated: 2016/10/25 13:07:54 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/09 13:18:29 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 class	Camera {
 	private:
+		glm::vec3	_position;
 		glm::mat4	_view;
 		glm::mat4	_projection;
 
@@ -31,6 +32,7 @@ class	Camera {
 		void		setView(glm::mat4 view);
 		void		setPosition(float x, float y, float z);
 
+		glm::vec3 &	position();
 		glm::mat4 &	projection();
 		glm::mat4 &	view();
 

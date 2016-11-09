@@ -6,7 +6,7 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/04 08:43:01 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/04 17:04:04 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/09 15:30:55 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,10 @@ void	ParticleSystem::launch() {
 	shader.addUniform("view");
 	shader.addUniform("projection");
 
+//	glEnable(GL_DEPTH_TEST);
+//	glDepthMask(GL_TRUE);
+//	glDepthFunc(GL_ALWAYS); // Change this to whatever kind of depth testing you want
+//	glDepthRange(0.0f, 1.0f);
 	while (!quit)
 	{
 		while (SDL_PollEvent(&event))
@@ -138,21 +142,16 @@ void	ParticleSystem::update() {
 }
 
 void	ParticleSystem::screenToWorld(unsigned int x, unsigned int y) {
+
 	float	glX = opengl.getXCoord(x);
 	float	glY = opengl.getYCoord(y);
 
-	glm::mat4	mat = camera.projection() * camera.view();
-	glm::mat4	inv = inverse(mat);
+	glm::mat4	invP = glm::inverse(camera.projection() * camera.view());
+	glm::vec4	screenPos = glm::vec4(glX, glY, 1.f, 1.f);
+	glm::vec4	worldPos = invP * screenPos;
 
-	glm::vec4	vIn(glX, glY, 0.0, 0.1);
-	glm::vec4	pos = vIn * inv;
-	pos.w = 1.0 / pos.w;
-	pos.x *= pos.w;
-	pos.y *= pos.w;
-	pos.z *= pos.w;
 
-	gravity_point = pos;
-	printf("gp %f %f %f\n", pos.x, pos.y, pos.z);
+	gravity_point = glm::vec4(camera.position(), 1.f) + worldPos * 60.f;
 }
 
 std::string	ParticleSystem::readFile(std::string path) {

@@ -30,7 +30,7 @@
 # include "Camera.hpp"
 # include "ParticleSystem.hpp"
 
-# define PARTICLES_AMOUNT	100000
+# define PARTICLES_AMOUNT	200000
 
 # define WIN_WIDTH	1600
 # define WIN_HEIGHT	1200

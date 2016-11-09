@@ -1,9 +1,3 @@
-#define MIN_VELOCITY	0.05f
-#define MAX_GRAVITY		2.0f
-
-float3	get_velocity(float3 position, float4 gravity_point);
-float	ps_distance(float2 v1, float2 v2);
-
 __kernel void sphere(
 			__global float3 *pos_buffer,
 			__global float3 *vel_buffer,
@@ -61,11 +55,11 @@ __kernel void	update(
 	force.x = 0;
 	force.y = 0;
 
-	force = (gp - pos2) * (float)( 25.0f / pow(distance(gp, pos2) + 10.0f, 2));
+	force = (gp - pos2) * (float)( 250.0f / pow(distance(gp, pos2) + 10.0f, 2));
 	force -= (vel2 * 0.05f);
 
 	float2 prev = pos2;
-	pos2 = pos2 + vel2 * deltaTime + 0.5f * force / 25.0f * (float)pow(deltaTime, 2);
+	pos2 = pos2 + vel2 * deltaTime + 0.5f * force / 20.0f * (float)pow(deltaTime, 2);
 	vel2 = (pos2 - prev) / deltaTime;
 
 
