@@ -4,6 +4,9 @@ in vec3 FragPos;
 uniform vec4 gravity_point;
 uniform vec3 camera_position;
 
+//uniform vec4 border_color;
+//uniform vec4 center_color;
+
 out vec4 color;
 
 #define BORDER_COLOR	vec4(1.0, 0.0, 0.0, 1.0)

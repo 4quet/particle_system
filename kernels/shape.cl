@@ -1,3 +1,33 @@
+__kernel void cube(
+			__global float3 *pos_buffer,
+			__global float3 *vel_buffer,
+			uint particles_amount)
+{
+    uint i;
+	__global float3 *position;
+	__global float3 *velocity;
+	
+	i = get_global_id(0);
+	position = &(pos_buffer[i]);
+	velocity = &(vel_buffer[i]);
+
+	uint	sdc = cbrt((float)particles_amount);
+	uint	x = fmod((float)i, (float)sdc);
+	uint	y = fmod((float)i / sdc, (float)sdc);
+	uint	z = i / (sdc * sdc);
+
+	float	sds = 1.0f / sdc;
+	float	sds2 = sds / 2.0f;
+
+	position->x = x * sds - 0.5 + sds2;
+	position->y = y * sds - 0.5 + sds2;
+	position->z = z * sds - 0.5 + sds2;
+	velocity->x = 0;
+	velocity->y = 0;
+	velocity->z = 0;
+}
+
+
 __kernel void sphere(
 			__global float3 *pos_buffer,
 			__global float3 *vel_buffer,
@@ -55,11 +85,11 @@ __kernel void	update(
 	force.x = 0;
 	force.y = 0;
 
-	force = (gp - pos2) * (float)( 250.0f / pow(distance(gp, pos2) + 10.0f, 2));
+	force = (gp - pos2) * (float)( 550.0f / pow(distance(gp, pos2) + 10.0f, 2));
 	force -= (vel2 * 0.05f);
 
 	float2 prev = pos2;
-	pos2 = pos2 + vel2 * deltaTime + 0.5f * force / 50.0f * (float)pow(deltaTime, 2);
+	pos2 = pos2 + vel2 * deltaTime + 0.5f * force / 100.0f * (float)pow(deltaTime, 2);
 	vel2 = (pos2 - prev) / deltaTime;
 
 

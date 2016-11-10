@@ -6,7 +6,7 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/04 08:43:01 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/10 17:26:09 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/10 19:05:08 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,11 @@ ParticleSystem::ParticleSystem() {
 	opencl.loadCLProgram("kernels/shape.cl");
 }
 
-void	ParticleSystem::init() {
+void	ParticleSystem::init(std::string shape_to_init) {
 
 	gravity_point = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
-	cl::Kernel	kernel(opencl.program, "sphere");
+	shape = shape_to_init;
+	cl::Kernel	kernel(opencl.program, shape.c_str());
 
 	kernel.setArg(0, opencl.buffers[0]);
 	kernel.setArg(1, opencl.buffers[1]);
@@ -52,6 +53,9 @@ void	ParticleSystem::launch() {
 	shader.addUniform("projection");
 	shader.addUniform("gravity_point");
 	shader.addUniform("camera_position");
+
+//	shader.addUniform("border_color");
+//	shader.addUniform("center_color");
 
 	while (!quit)
 	{
@@ -94,6 +98,14 @@ void	ParticleSystem::launch() {
 						case SDLK_SPACE:
 							anim = !anim;
 							break;
+						case SDLK_TAB:
+							shape = (shape == "sphere") ? "cube" : "sphere";
+							anim = false;
+							init(shape);
+							break;
+						case SDLK_RETURN:
+							swapColorSet();
+							break;
 					}
 					break;
 				/*
@@ -117,7 +129,7 @@ void	ParticleSystem::launch() {
 					else if (event.button.button == SDL_BUTTON_RIGHT)
 					{
 						anim = false;
-						init();
+						init(shape);
 					}
 					break;
 				case SDL_MOUSEBUTTONUP:
@@ -132,7 +144,14 @@ void	ParticleSystem::launch() {
 					break;
 			}
 		}
+
 		
+		/*
+		 glClearColor(	backgroundColor.x
+				 		backgroundColor.y
+				 		backgroundColor.z
+				 		backgroundColor.w);
+						*/
 		 glClear(GL_COLOR_BUFFER_BIT);
 
 		 shader.setUniformMatrix(camera.view(), "view");
@@ -176,6 +195,12 @@ void	ParticleSystem::update(bool anim) {
 			opencl.queue.finish();
 			opencl.queue.enqueueReleaseGLObjects(&opencl.buffers);
 		}
+}
+
+void	ParticleSystem::swapColorSet() {
+//	float r = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+
+//	glUniform4f(shader.uniform("border_color"), srand(
 }
 
 void	ParticleSystem::screenToWorld(unsigned int x, unsigned int y) {

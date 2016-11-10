@@ -5,8 +5,10 @@ int	main(void)
 {
 	try {
 		ParticleSystem	ps;
+
+		srand(time(NULL));
 		
-		ps.init();
+		ps.init("cube");
 		ps.launch();
 	}
 	catch (std::runtime_error error) {
