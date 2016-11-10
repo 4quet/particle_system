@@ -6,22 +6,21 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/18 16:00:28 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/09 15:27:44 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/10 17:17:53 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "particle_system.h"
 
 Camera::Camera() {
-	_position = glm::vec3(0.f, 0.f, -60.f);
-	_projection = glm::perspective(45.0f, (float)WIN_WIDTH / (float)WIN_HEIGHT, 1.0f, 100.0f);
+	_position = glm::vec3(0.f, 0.f, -2.5f);
+	_projection = glm::perspective( 45.0f,
+									(float)WIN_WIDTH / (float)WIN_HEIGHT,
+									Z_NEAR, Z_FAR);
 	_view = glm::lookAt( _position,
 						 glm::vec3(0.0f, 0.0f,  0.0f),
 						 glm::vec3(0.0f, 1.0f,  0.0f) );
 }
-
-Camera::Camera(glm::mat4 view, glm::mat4 projection) : 
-	_view(view), _projection(projection) { }
 
 glm::vec3 &	Camera::position() { return (_position); }
 glm::mat4 &	Camera::projection() { return (_projection); }
@@ -31,8 +30,11 @@ void		Camera::setView(glm::mat4 view) { _view = view; }
 void		Camera::setProjection(glm::mat4 projection) { _projection = projection; }
 
 void		Camera::setPosition(float x, float y, float z) {
+	_position.x = x;
+	_position.y = y;
+	_position.z = z;
 	_view = glm::lookAt( glm::vec3(x, y, z),
-						 glm::vec3(0.0f, 0.0f,  0.0f),
+						 glm::vec3(x, y,  0.0f),
 						 glm::vec3(0.0f, 1.0f,  0.0f) );
 }
 

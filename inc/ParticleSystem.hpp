@@ -6,7 +6,7 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/04 08:44:18 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/04 14:51:22 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/10 17:11:42 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ class	ParticleSystem {
 
 		void	init();
 		void	launch();
-		void	update();
+		void	update(bool anim);
 
 		void	screenToWorld(unsigned int x, unsigned int y);
 

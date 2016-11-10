@@ -35,6 +35,9 @@
 # define WIN_WIDTH	1600
 # define WIN_HEIGHT	1200
 
+# define Z_NEAR		1.0f
+# define Z_FAR		100.0f
+
 
 
 #endif

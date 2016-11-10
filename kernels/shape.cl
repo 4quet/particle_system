@@ -59,7 +59,7 @@ __kernel void	update(
 	force -= (vel2 * 0.05f);
 
 	float2 prev = pos2;
-	pos2 = pos2 + vel2 * deltaTime + 0.5f * force / 20.0f * (float)pow(deltaTime, 2);
+	pos2 = pos2 + vel2 * deltaTime + 0.5f * force / 50.0f * (float)pow(deltaTime, 2);
 	vel2 = (pos2 - prev) / deltaTime;
 
 

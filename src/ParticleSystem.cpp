@@ -6,7 +6,7 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/04 08:43:01 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/09 15:30:55 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/10 17:26:09 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,30 +45,75 @@ void	ParticleSystem::launch() {
 	bool			click = false;
 	bool			anim = false;
 
-	glm::mat4	model;
+	glm::vec3	newPos;
+	float		step = -camera.position().z * 0.02;
 
-	model = glm::mat4();
-
-//	shader.addUniform("model");
 	shader.addUniform("view");
 	shader.addUniform("projection");
+	shader.addUniform("gravity_point");
+	shader.addUniform("camera_position");
 
-//	glEnable(GL_DEPTH_TEST);
-//	glDepthMask(GL_TRUE);
-//	glDepthFunc(GL_ALWAYS); // Change this to whatever kind of depth testing you want
-//	glDepthRange(0.0f, 1.0f);
 	while (!quit)
 	{
+		const Uint8	*keyboardState = SDL_GetKeyboardState(NULL);
+
+		shader.use();
+		newPos = camera.position();
+
+		if (keyboardState[SDL_SCANCODE_W] && newPos.z < 0)
+			newPos.z += step;
+		if (keyboardState[SDL_SCANCODE_S] && newPos.z > -(Z_FAR - 5))
+			newPos.z -= step;
+		if (keyboardState[SDL_SCANCODE_A] || keyboardState[SDL_SCANCODE_LEFT])
+			newPos.x += step;
+		if (keyboardState[SDL_SCANCODE_D] || keyboardState[SDL_SCANCODE_RIGHT])
+			newPos.x -= step;
+
+		if (keyboardState[SDL_SCANCODE_UP])
+			newPos.y += step;
+		if (keyboardState[SDL_SCANCODE_DOWN])
+			newPos.y -= step;
+
+		if (camera.position() != newPos)
+		{
+			camera.setPosition(newPos.x, newPos.y, newPos.z);
+			glUniform3f(shader.uniform("camera_position"), newPos.x,
+				newPos.y, newPos.z);
+			step = -newPos.z * 0.02;
+		}
+
+
 		while (SDL_PollEvent(&event))
 		{
 			switch( event.type ) {
 				case SDL_KEYDOWN:
+					switch( event.key.keysym.sym ){
+						case SDLK_ESCAPE:
+							quit = true;
+							break;
+						case SDLK_SPACE:
+							anim = !anim;
+							break;
+					}
 					break;
+				/*
+				case SDL_KEYUP:
+					switch( event.key.keysym.sym ){
+						case SDLK_w:
+							printf("UP newZ = 0\n");
+							newZ = 0;
+							break;
+						case SDLK_s:
+							newZ = 0;
+							break;
+					}
+					*/
 				case SDL_MOUSEBUTTONDOWN:
-					if (anim == false)
-						anim = true;
 					if (event.button.button == SDL_BUTTON_LEFT)
+					{
 						click = true;
+						anim = true;
+					}
 					else if (event.button.button == SDL_BUTTON_RIGHT)
 					{
 						anim = false;
@@ -87,19 +132,16 @@ void	ParticleSystem::launch() {
 					break;
 			}
 		}
-
+		
 		 glClear(GL_COLOR_BUFFER_BIT);
 
-		 shader.use();
-
-//		 shader.setUniformMatrix(model, "model");
 		 shader.setUniformMatrix(camera.view(), "view");
 		 shader.setUniformMatrix(camera.projection(), "projection");
 
-		 if (anim)
-			 update();
+		 update(anim);
 
 		 opengl.render();
+
 
 		 shader.disable();
 
@@ -108,9 +150,7 @@ void	ParticleSystem::launch() {
 	}
 }
 
-void	ParticleSystem::update() {
-	/*
-		*/
+void	ParticleSystem::update(bool anim) {
 	static std::clock_t		oldTime = std::clock();
 	std::clock_t			currentTime;
 	cl_float				deltaTime;
@@ -119,26 +159,23 @@ void	ParticleSystem::update() {
 		deltaTime = 1000.0f * (currentTime - oldTime) / CLOCKS_PER_SEC;
 		oldTime = currentTime;
 
-		cl_float	dt = 0.0000001;
-		(void)dt;
+		if (anim)
+		{
+			cl::Kernel	kernel(opencl.program, "update");
+			kernel.setArg(0, opencl.buffers[0]);
+			kernel.setArg(1, opencl.buffers[1]);
+			kernel.setArg(2, sizeof(cl_float4), glm::value_ptr(gravity_point));
+			kernel.setArg(3, sizeof(cl_float), &deltaTime);
 
-		float	*gp = glm::value_ptr(gravity_point);
-		(void)gp;
+			glFinish();
 
-		cl::Kernel	kernel(opencl.program, "update");
-		kernel.setArg(0, opencl.buffers[0]);
-		kernel.setArg(1, opencl.buffers[1]);
-		kernel.setArg(2, sizeof(cl_float4), gp);
-		kernel.setArg(3, sizeof(cl_float), &deltaTime);
-
-		glFinish();
-
-		opencl.queue.enqueueAcquireGLObjects(&opencl.buffers);
-		opencl.queue.enqueueNDRangeKernel(kernel, cl::NullRange,
-				cl::NDRange(PARTICLES_AMOUNT),
-				cl::NullRange);
-		opencl.queue.finish();
-		opencl.queue.enqueueReleaseGLObjects(&opencl.buffers);
+			opencl.queue.enqueueAcquireGLObjects(&opencl.buffers);
+			opencl.queue.enqueueNDRangeKernel(kernel, cl::NullRange,
+					cl::NDRange(PARTICLES_AMOUNT),
+					cl::NullRange);
+			opencl.queue.finish();
+			opencl.queue.enqueueReleaseGLObjects(&opencl.buffers);
+		}
 }
 
 void	ParticleSystem::screenToWorld(unsigned int x, unsigned int y) {
@@ -151,7 +188,9 @@ void	ParticleSystem::screenToWorld(unsigned int x, unsigned int y) {
 	glm::vec4	worldPos = invP * screenPos;
 
 
-	gravity_point = glm::vec4(camera.position(), 1.f) + worldPos * 60.f;
+	gravity_point = glm::vec4(camera.position(), 1.f) + worldPos * (-camera.position().z);
+	glUniform4f(shader.uniform("gravity_point"), gravity_point.x,
+			gravity_point.y, 0, 0);
 }
 
 std::string	ParticleSystem::readFile(std::string path) {
