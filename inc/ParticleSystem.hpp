@@ -35,7 +35,8 @@ class	ParticleSystem {
 		void	launch();
 		void	update(bool anim);
 
-		void	swapColorSet();
+		void	randomColorSet();
+		void	swapBackground();
 		void	screenToWorld(unsigned int x, unsigned int y);
 
 		static std::string	readFile(std::string path);

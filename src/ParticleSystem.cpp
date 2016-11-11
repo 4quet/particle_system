@@ -20,6 +20,10 @@ ParticleSystem::ParticleSystem() {
 			cl::BufferGL(opencl.context, CL_MEM_READ_WRITE, opengl.vel_vbo, NULL)
 	);
 	opencl.loadCLProgram("kernels/shape.cl");
+	shader.addUniform("border_color");
+	shader.addUniform("center_color");
+	swapBackground();
+	randomColorSet();
 }
 
 void	ParticleSystem::init(std::string shape_to_init) {
@@ -54,8 +58,6 @@ void	ParticleSystem::launch() {
 	shader.addUniform("gravity_point");
 	shader.addUniform("camera_position");
 
-//	shader.addUniform("border_color");
-//	shader.addUniform("center_color");
 
 	while (!quit)
 	{
@@ -104,7 +106,10 @@ void	ParticleSystem::launch() {
 							init(shape);
 							break;
 						case SDLK_RETURN:
-							swapColorSet();
+							randomColorSet();
+							break;
+						case SDLK_b:
+							swapBackground();
 							break;
 					}
 					break;
@@ -146,12 +151,10 @@ void	ParticleSystem::launch() {
 		}
 
 		
-		/*
-		 glClearColor(	backgroundColor.x
-				 		backgroundColor.y
-				 		backgroundColor.z
+		 glClearColor(	backgroundColor.x,
+				 		backgroundColor.y,
+				 		backgroundColor.z,
 				 		backgroundColor.w);
-						*/
 		 glClear(GL_COLOR_BUFFER_BIT);
 
 		 shader.setUniformMatrix(camera.view(), "view");
@@ -197,10 +200,26 @@ void	ParticleSystem::update(bool anim) {
 		}
 }
 
-void	ParticleSystem::swapColorSet() {
-//	float r = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+void	ParticleSystem::randomColorSet() {
+	float r;
+	float g;
+	float b;
 
-//	glUniform4f(shader.uniform("border_color"), srand(
+	r = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+	g = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+	b = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+	glUniform4f(shader.uniform("border_color"), r, g, b, 1.0f);
+	r = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+	g = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+	b = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+	glUniform4f(shader.uniform("center_color"), r, g, b, 1.0f);
+}
+
+void	ParticleSystem::swapBackground() {
+	if (backgroundColor.x < 1.0f)
+		backgroundColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	else
+		backgroundColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 void	ParticleSystem::screenToWorld(unsigned int x, unsigned int y) {

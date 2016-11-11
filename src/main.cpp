@@ -8,7 +8,7 @@ int	main(void)
 
 		srand(time(NULL));
 		
-		ps.init("cube");
+		ps.init("sphere");
 		ps.launch();
 	}
 	catch (std::runtime_error error) {

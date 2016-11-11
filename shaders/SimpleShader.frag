@@ -4,8 +4,8 @@ in vec3 FragPos;
 uniform vec4 gravity_point;
 uniform vec3 camera_position;
 
-//uniform vec4 border_color;
-//uniform vec4 center_color;
+uniform vec4 border_color;
+uniform vec4 center_color;
 
 out vec4 color;
 
@@ -17,5 +17,5 @@ void main()
 	float	distance = length(gravity_point.xyz - FragPos);
 	float	ratio = (1.0 / distance) / 4.0;
 
-	color = mix(BORDER_COLOR, CENTER_COLOR, ratio * (-camera_position.z * 0.5));
+	color = mix(border_color, center_color, ratio * (-camera_position.z * 0.5));
 }
