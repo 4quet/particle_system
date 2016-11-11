@@ -1,3 +1,6 @@
+#pragma OPENCL EXTENSION cl_khr_fp64 : enable
+#define M_PI 3.14159265358979323846
+
 __kernel void cube(
 			__global float3 *pos_buffer,
 			__global float3 *vel_buffer,
@@ -19,9 +22,9 @@ __kernel void cube(
 	float	sds = 1.0f / sdc;
 	float	sds2 = sds / 2.0f;
 
-	position->x = x * sds - 0.5 + sds2;
-	position->y = y * sds - 0.5 + sds2;
-	position->z = z * sds - 0.5 + sds2;
+	position->x = x * sds - 0.5f + sds2;
+	position->y = y * sds - 0.5f + sds2;
+	position->z = z * sds - 0.5f + sds2;
 	velocity->x = 0;
 	velocity->y = 0;
 	velocity->z = 0;
@@ -41,8 +44,8 @@ __kernel void sphere(
 	position = &(pos_buffer[i]);
 	velocity = &(vel_buffer[i]);
 
-	float offset = 2.0 / particles_amount;
-	float increment = M_PI * (3.0 - sqrt(5.0));
+	float offset = 2.0f / particles_amount;
+	float increment = M_PI * (3.0f - sqrt(5.0f));
 
 	position->y = ((i * offset) - 1) + (offset / 2);
 	float r = sqrt(1 - pow(position->y, 2));
@@ -59,7 +62,8 @@ __kernel void	update(
 			__global float3 *pos_buffer,
 			__global float3 *vel_buffer,
 			float4 gravity_point,
-			float deltaTime)
+			float deltaTime,
+			uint click)
 {
 	uint	i;
 	float3	position;
@@ -85,8 +89,9 @@ __kernel void	update(
 	force.x = 0;
 	force.y = 0;
 
-	force = (gp - pos2) * (float)( 550.0f / pow(distance(gp, pos2) + 10.0f, 2));
-	force -= (vel2 * 0.05f);
+	if (click == 1)
+		force = (gp - pos2) * (float)( 550.0f / pow(distance(gp, pos2) + 10.0f, 2));
+//	force -= (vel2 * 0.005f);
 
 	float2 prev = pos2;
 	pos2 = pos2 + vel2 * deltaTime + 0.5f * force / 100.0f * (float)pow(deltaTime, 2);

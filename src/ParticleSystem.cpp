@@ -160,7 +160,7 @@ void	ParticleSystem::launch() {
 		 shader.setUniformMatrix(camera.view(), "view");
 		 shader.setUniformMatrix(camera.projection(), "projection");
 
-		 update(anim);
+		 update(anim, click);
 
 		 opengl.render();
 
@@ -172,13 +172,15 @@ void	ParticleSystem::launch() {
 	}
 }
 
-void	ParticleSystem::update(bool anim) {
+void	ParticleSystem::update(bool anim, bool click) {
 	static std::clock_t		oldTime = std::clock();
 	std::clock_t			currentTime;
 	cl_float				deltaTime;
 
+	cl_uint clClick = (click == true) ? 1 : 0;
+
 		currentTime = std::clock();
-		deltaTime = 1000.0f * (currentTime - oldTime) / CLOCKS_PER_SEC;
+		deltaTime = 100.0f * (currentTime - oldTime) / CLOCKS_PER_SEC;
 		oldTime = currentTime;
 
 		if (anim)
@@ -186,8 +188,12 @@ void	ParticleSystem::update(bool anim) {
 			cl::Kernel	kernel(opencl.program, "update");
 			kernel.setArg(0, opencl.buffers[0]);
 			kernel.setArg(1, opencl.buffers[1]);
+
 			kernel.setArg(2, sizeof(cl_float4), glm::value_ptr(gravity_point));
+
 			kernel.setArg(3, sizeof(cl_float), &deltaTime);
+
+			kernel.setArg(4, sizeof(cl_uint), &clClick);
 
 			glFinish();
 

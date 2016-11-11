@@ -33,7 +33,7 @@ class	ParticleSystem {
 
 		void	init(std::string shape);
 		void	launch();
-		void	update(bool anim);
+		void	update(bool anim, bool click);
 
 		void	randomColorSet();
 		void	swapBackground();
