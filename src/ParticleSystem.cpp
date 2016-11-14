@@ -6,7 +6,7 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/04 08:43:01 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/10 19:05:08 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/14 12:33:32 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,10 @@ ParticleSystem::ParticleSystem() {
 	opencl.loadCLProgram("kernels/shape.cl");
 	shader.addUniform("border_color");
 	shader.addUniform("center_color");
-	swapBackground();
+	backgroundColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	shader.use();
 	randomColorSet();
+	shader.disable();
 }
 
 void	ParticleSystem::init(std::string shape_to_init) {
@@ -58,9 +60,15 @@ void	ParticleSystem::launch() {
 	shader.addUniform("gravity_point");
 	shader.addUniform("camera_position");
 
+	Uint32	startclock = 0;
+	Uint32	deltaclock = 0;
+	Uint32	timer = 0;
+	Uint32	currentFPS = 0;
 
 	while (!quit)
 	{
+		startclock = SDL_GetTicks();
+
 		const Uint8	*keyboardState = SDL_GetKeyboardState(NULL);
 
 		shader.use();
@@ -113,18 +121,6 @@ void	ParticleSystem::launch() {
 							break;
 					}
 					break;
-				/*
-				case SDL_KEYUP:
-					switch( event.key.keysym.sym ){
-						case SDLK_w:
-							printf("UP newZ = 0\n");
-							newZ = 0;
-							break;
-						case SDLK_s:
-							newZ = 0;
-							break;
-					}
-					*/
 				case SDL_MOUSEBUTTONDOWN:
 					if (event.button.button == SDL_BUTTON_LEFT)
 					{
@@ -168,6 +164,16 @@ void	ParticleSystem::launch() {
 		 shader.disable();
 
 		 SDL_GL_SwapWindow(sdl.win);
+		 deltaclock = SDL_GetTicks() - startclock;
+		 if (deltaclock != 0)
+		 {
+			 currentFPS = 1000 / deltaclock;
+			 if (startclock - timer > 500)
+			 {
+			 	SDL_SetWindowTitle(sdl.win, std::string(std::to_string(currentFPS) + " FPS").c_str());
+				timer += 500;
+			 }
+		 }
 
 	}
 }
@@ -180,29 +186,33 @@ void	ParticleSystem::update(bool anim, bool click) {
 	cl_uint clClick = (click == true) ? 1 : 0;
 
 		currentTime = std::clock();
-		deltaTime = 100.0f * (currentTime - oldTime) / CLOCKS_PER_SEC;
+		deltaTime = 250.0f * (currentTime - oldTime) / CLOCKS_PER_SEC;
 		oldTime = currentTime;
 
 		if (anim)
 		{
-			cl::Kernel	kernel(opencl.program, "update");
-			kernel.setArg(0, opencl.buffers[0]);
-			kernel.setArg(1, opencl.buffers[1]);
+			try {
+				cl::Kernel	kernel(opencl.program, "update");
+				kernel.setArg(0, opencl.buffers[0]);
+				kernel.setArg(1, opencl.buffers[1]);
 
-			kernel.setArg(2, sizeof(cl_float4), glm::value_ptr(gravity_point));
+				kernel.setArg(2, sizeof(cl_float4), glm::value_ptr(gravity_point));
 
-			kernel.setArg(3, sizeof(cl_float), &deltaTime);
+				kernel.setArg(3, sizeof(cl_float), &deltaTime);
 
-			kernel.setArg(4, sizeof(cl_uint), &clClick);
+				kernel.setArg(4, sizeof(cl_uint), &clClick);
 
-			glFinish();
+				glFinish();
 
-			opencl.queue.enqueueAcquireGLObjects(&opencl.buffers);
-			opencl.queue.enqueueNDRangeKernel(kernel, cl::NullRange,
-					cl::NDRange(PARTICLES_AMOUNT),
-					cl::NullRange);
-			opencl.queue.finish();
-			opencl.queue.enqueueReleaseGLObjects(&opencl.buffers);
+				opencl.queue.enqueueAcquireGLObjects(&opencl.buffers);
+				opencl.queue.enqueueNDRangeKernel(kernel, cl::NullRange,
+						cl::NDRange(PARTICLES_AMOUNT),
+						cl::NullRange);
+				opencl.queue.finish();
+				opencl.queue.enqueueReleaseGLObjects(&opencl.buffers);
+			} catch(cl::Error & e) {
+				printf("%s : %d\n", e.what(), e.err());
+			}
 		}
 }
 

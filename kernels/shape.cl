@@ -1,6 +1,3 @@
-#pragma OPENCL EXTENSION cl_khr_fp64 : enable
-#define M_PI 3.14159265358979323846
-
 __kernel void cube(
 			__global float3 *pos_buffer,
 			__global float3 *vel_buffer,
@@ -91,10 +88,11 @@ __kernel void	update(
 
 	if (click == 1)
 		force = (gp - pos2) * (float)( 550.0f / pow(distance(gp, pos2) + 10.0f, 2));
-//	force -= (vel2 * 0.005f);
+
+	force -= (vel2 * 0.3f);
 
 	float2 prev = pos2;
-	pos2 = pos2 + vel2 * deltaTime + 0.5f * force / 100.0f * (float)pow(deltaTime, 2);
+	pos2 = pos2 + vel2 * deltaTime + 0.5f * force / 10.0f * (float)pow(deltaTime, 2);
 	vel2 = (pos2 - prev) / deltaTime;
 
 
