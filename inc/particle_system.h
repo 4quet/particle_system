@@ -18,6 +18,9 @@
 # include <map>
 # include <cstdlib>
 
+# include <stdio.h>
+# include <stdlib.h>
+
 # include <glm/glm.hpp>
 # include <glm/gtc/matrix_transform.hpp>
 # include <glm/gtc/type_ptr.hpp>
@@ -28,16 +31,21 @@
 # include "OpenGL.hpp"
 # include "OpenCL.hpp"
 # include "Shader.hpp"
+
 # include "Camera.hpp"
 # include "ParticleSystem.hpp"
 
-# define PARTICLES_AMOUNT	200000
 
-# define WIN_WIDTH	1600
-# define WIN_HEIGHT	1200
+# define PARTICLES_AMOUNT	1000000
+# define MAX_EMITTED_AMOUNT	10000
 
-# define Z_NEAR		1.0f
-# define Z_FAR		100.0f
+# define WIN_WIDTH			1600
+# define WIN_HEIGHT			1200
+# define INFO_WIN_WIDTH		400
+# define INFO_WIN_HEIGHT	400
+
+# define Z_NEAR		0.1f
+# define Z_FAR		1000.0f
 
 
 

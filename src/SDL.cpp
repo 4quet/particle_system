@@ -6,13 +6,17 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/04 08:42:01 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/04 08:42:49 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/15 11:06:38 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "particle_system.h"
 
 SDL::SDL() {
+	initOpenGLWindow();
+}
+
+void	SDL::initOpenGLWindow() {
 	std::string	errorMsg;
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)

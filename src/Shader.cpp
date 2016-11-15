@@ -6,7 +6,7 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/15 15:33:25 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/04 10:17:12 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/15 10:03:55 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ Shader::Shader() {
 	vertexCode = ParticleSystem::readFile("shaders/SimpleShader.vert");
 	fragmentCode = ParticleSystem::readFile("shaders/SimpleShader.frag");
 
+	std::cout << "Compiling vertex shader... ";
 	vertexId = compile(vertexCode, GL_VERTEX_SHADER);
+	std::cout << "Compiling fragment shader... ";
 	fragmentId = compile(fragmentCode, GL_FRAGMENT_SHADER);
 
 	programId = glCreateProgram();
@@ -42,7 +44,7 @@ Shader::Shader() {
 GLuint		Shader::compile(std::string source, GLenum type) {
 	GLuint			shaderID;
 	const GLchar	*charSource;
-	GLint			status;
+	GLint			status = GL_TRUE;
 
 	shaderID = glCreateShader(type);
 	if (shaderID == 0)

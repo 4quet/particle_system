@@ -6,7 +6,7 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/04 08:52:13 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/04 15:05:57 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/15 14:48:15 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ OpenGL::OpenGL() {
 void	OpenGL::initVBOs() {
 	GLuint	size;
 
-	size = sizeof(cl_float3) * static_cast<GLuint>(PARTICLES_AMOUNT);
+	size = sizeof(cl_float3) * static_cast<GLuint>(PARTICLES_AMOUNT + MAX_EMITTED_AMOUNT);
 
 	glGenBuffers(1, &pos_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, pos_vbo);
@@ -29,6 +29,8 @@ void	OpenGL::initVBOs() {
 	glGenBuffers(1, &vel_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vel_vbo);
 	glBufferData(GL_ARRAY_BUFFER, size, NULL, GL_STREAM_DRAW);
+
+	//
 }
 
 void	OpenGL::initVAO() {
@@ -48,7 +50,7 @@ void	OpenGL::initVAO() {
 
 void	OpenGL::render() {
 	glBindVertexArray(vao);
-	glDrawArrays(GL_POINTS, 0, PARTICLES_AMOUNT);
+	glDrawArrays(GL_POINTS, 0, PARTICLES_AMOUNT + MAX_EMITTED_AMOUNT);
 	glBindVertexArray(0);
 }
 
