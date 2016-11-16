@@ -6,14 +6,12 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/04 08:44:18 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/15 15:16:18 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/16 17:30:03 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARTICLE_SYSTEM_HPP
 # define PARTICLE_SYSTEM_HPP
-
-# include "particle_system.h"
 
 class	ParticleSystem {
 
@@ -29,6 +27,13 @@ class	ParticleSystem {
 		glm::vec3	backgroundColor;
 
 		cl_uint		emitted;
+		glm::vec3	emitter;
+
+		std::vector<glm::vec3>	*emitters;
+
+		float		step;
+
+		void	setEmitter(glm::vec3 position);
 
 	public:
 		ParticleSystem();
@@ -42,6 +47,8 @@ class	ParticleSystem {
 		void	randomColorSet();
 		void	swapBackground();
 		void	screenToWorld(unsigned int x, unsigned int y);
+
+		void	printUsage() const;
 
 		static std::string	readFile(std::string path);
 

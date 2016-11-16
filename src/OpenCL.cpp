@@ -6,11 +6,11 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/04 09:01:11 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/15 10:03:30 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/16 17:26:28 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "particle_system.h"
+#include "particle_system.hpp"
 
 OpenCL::OpenCL() {
 	std::vector<cl::Platform>	platforms;

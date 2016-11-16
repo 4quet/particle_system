@@ -6,11 +6,11 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/04 08:52:13 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/15 14:48:15 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/16 17:26:16 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "particle_system.h"
+#include "particle_system.hpp"
 
 OpenGL::OpenGL() {
 	initVBOs();

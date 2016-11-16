@@ -69,9 +69,9 @@ __kernel void	emit(
 	velocity = vel_buffer[i];
 
 	position = gravity_point;
-	velocity.x = 0;
-	velocity.y = 0;
-	velocity.z = 0;
+	velocity.x = 0.0;
+	velocity.y = 0.0;
+	velocity.z = 0.0;
 	pos_buffer[i] = position;
 	vel_buffer[i] = velocity;
 }

@@ -6,11 +6,11 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/15 15:33:25 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/15 10:03:55 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/16 17:30:48 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "particle_system.h"
+#include "particle_system.hpp"
 
 Shader::Shader() {
 	std::string	vertexCode;

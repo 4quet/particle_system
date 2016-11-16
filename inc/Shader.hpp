@@ -6,14 +6,12 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/15 15:26:57 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/04 10:18:29 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/16 17:29:30 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SHADER_HPP
 # define SHADER_HPP
-
-# include "particle_system.h"
 
 class	Shader {
 	private:

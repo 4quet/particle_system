@@ -6,14 +6,12 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/04 09:01:24 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/04 09:03:07 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/16 17:28:19 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef OPENCL_PS_HPP
 # define OPENCL_PS_HPP
-
-# include "particle_system.h"
 
 class	OpenCL {
 	private:

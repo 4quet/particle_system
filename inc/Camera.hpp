@@ -6,14 +6,12 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/18 16:00:56 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/09 13:18:29 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/16 17:28:35 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CAMERA_HPP
 # define CAMERA_HPP
-
-# include "particle_system.h"
 
 class	Camera {
 	private:

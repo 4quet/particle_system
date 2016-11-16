@@ -6,11 +6,11 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/18 16:00:28 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/10 17:17:53 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/16 17:26:47 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "particle_system.h"
+#include "particle_system.hpp"
 
 Camera::Camera() {
 	_position = glm::vec3(0.f, 0.f, -2.5f);
