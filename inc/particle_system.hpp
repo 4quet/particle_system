@@ -35,9 +35,7 @@
 # include "Camera.hpp"
 # include "ParticleSystem.hpp"
 
-
-# define PARTICLES_AMOUNT	1000000
-# define MAX_EMITTED_AMOUNT	1000
+# define MAX_EMITTED_AMOUNT	10000
 
 # define WIN_WIDTH			1600
 # define WIN_HEIGHT			1200
@@ -47,6 +45,6 @@
 # define Z_NEAR		0.1f
 # define Z_FAR		1000.0f
 
-
+extern int	g_ParticlesAmount;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/18 16:00:28 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/16 17:26:47 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/21 10:51:51 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,3 @@ void		Camera::setPosition(float x, float y, float z) {
 Camera::~Camera() {
 
 }
-

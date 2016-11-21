@@ -6,7 +6,7 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/04 09:01:11 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/16 17:26:28 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/21 10:55:59 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,9 @@ OpenCL::OpenCL() {
 	CGLShareGroupObj			CGLShareGroup;
 	cl_context_properties		properties[3];
 
-	error = cl::Platform::get(&platforms);
-	printf("cl::Platform::get(): %s\n", errorString(error).c_str());
-
 	used_device = 0;
+	error = cl::Platform::get(&platforms);
 	error = platforms[0].getDevices(CL_DEVICE_TYPE_GPU, &devices);
-	printf("getDevices: %s\n", errorString(error).c_str());
 
 	CGLContext = CGLGetCurrentContext();
     CGLShareGroup = CGLGetShareGroup(CGLContext);
@@ -31,12 +28,11 @@ OpenCL::OpenCL() {
 	properties[1] = (cl_context_properties)CGLShareGroup;
 	properties[2] = 0;
 	context = clCreateContext(properties, 0, 0, NULL, NULL, &error);
-	printf("clCreateContext(): %s\n", errorString(error).c_str());
 
 	try {
 		queue = cl::CommandQueue(context, devices[used_device], 0, &error);
 	} catch (cl::Error er) {
-		printf("ERROR: %s(%d)\n", er.what(), er.err());
+		throw std::runtime_error(er.what());
 	}
 }
 
@@ -49,19 +45,21 @@ void	OpenCL::loadCLProgram(std::string path) {
 		source = cl::Program::Sources(1, std::make_pair(code.c_str(), code.size()));
 		program = cl::Program(context, source);
 	} catch (cl::Error er) {
-		printf("ERROR: %s(%s)\n", er.what(), errorString(er.err()).c_str());
+		throw std::runtime_error(errorString(er.err()));
 	}
 	try {
 		error = program.build(devices);
 	} catch (cl::Error er) {
-		printf("program.build() : %s(%s)\n", er.what(), errorString(er.err()).c_str());
+		throw std::runtime_error(errorString(er.err()));
 	}
+	/*
 	std::cout << "Build Status: " <<
 		program.getBuildInfo<CL_PROGRAM_BUILD_STATUS>(devices[0]) << std::endl;
 	std::cout << "Build Options:\t" <<
 		program.getBuildInfo<CL_PROGRAM_BUILD_OPTIONS>(devices[0]) << std::endl;
 	std::cout << "Build Log:\t " <<
 		program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(devices[0]) << std::endl;
+	*/
 
 }
 

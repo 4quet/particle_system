@@ -6,7 +6,7 @@
 /*   By: lfourque <lfourque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/15 15:33:25 by lfourque          #+#    #+#             */
-/*   Updated: 2016/11/16 17:30:48 by lfourque         ###   ########.fr       */
+/*   Updated: 2016/11/21 11:31:44 by lfourque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ Shader::Shader() {
 	vertexCode = ParticleSystem::readFile("shaders/SimpleShader.vert");
 	fragmentCode = ParticleSystem::readFile("shaders/SimpleShader.frag");
 
-	std::cout << "Compiling vertex shader... ";
 	vertexId = compile(vertexCode, GL_VERTEX_SHADER);
-	std::cout << "Compiling fragment shader... ";
 	fragmentId = compile(fragmentCode, GL_FRAGMENT_SHADER);
 
 	programId = glCreateProgram();
@@ -37,8 +35,6 @@ Shader::Shader() {
 	glGetProgramiv(programId, GL_LINK_STATUS, &status);
 	if (status == GL_FALSE)
 		throw std::runtime_error("Shader program link failed");
-	else
-		std::cout << "Shader program link OK\n";
 }
 
 GLuint		Shader::compile(std::string source, GLenum type) {
@@ -59,8 +55,6 @@ GLuint		Shader::compile(std::string source, GLenum type) {
 	{
 		throw std::runtime_error("Shader compilation failed");
 	}
-	else
-		std::cout << "Compilation OK\n";
 	return shaderID;
 }
 

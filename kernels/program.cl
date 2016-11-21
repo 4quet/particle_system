@@ -58,7 +58,7 @@ __kernel void sphere(
 __kernel void	emit(
 			__global float3 *pos_buffer,
 			__global float3 *vel_buffer,
-			float3 gravity_point)
+			float3 emitter)
 {
 	uint	i;
 	float3	position;
@@ -68,7 +68,7 @@ __kernel void	emit(
 	position = pos_buffer[i];
 	velocity = vel_buffer[i];
 
-	position = gravity_point;
+	position = emitter;
 	velocity.x = 0.0;
 	velocity.y = 0.0;
 	velocity.z = 0.0;
