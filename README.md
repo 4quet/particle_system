@@ -4,7 +4,7 @@ A particle system written in C++ that uses GPU.
 
 ## Libraries
 
-* OpenGL
+* OpenGL 4.1
 * OpenGL Mathematics (glm)
 * OpenCL
 * Simple DirectMedia Layer (SDL)
@@ -23,7 +23,7 @@ Launch using:
 
 ### Key bindings
 
-* **R**: Reset to initial shape (sphere or cube)>
+* **R**: Reset to initial shape (sphere or cube).
 * **TAB**: Switch between shapes (sphere or cube). Only works while on inital shape.
 * **Left Mouse Button**: Hold to enable a gravity point.
 * **Right Mouse Button**: Create a particle emitter.
